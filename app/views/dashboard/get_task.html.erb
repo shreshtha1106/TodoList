@@ -1,0 +1,52 @@
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+</head>
+<div class="container" style="background-color:lavender;">
+		<div class="row">
+			<div class="col-sm-12" style="background-color:lavenderblush;">
+<h1>Tasks displayed here</h1>
+</div>
+</div>
+<body>
+<h2>Tasks on <%=params[:date]%></h2>
+<%if @task_name.blank?%>
+		<div class="row">
+			<div class="col-sm-12" style="background-color:lavenderblush;">
+Tasks Dont Exist
+</div>
+</div>
+<%else%>
+<table border= 1, width= "900">
+	<thead>
+			<tr bgcolor="#F0F8FF">
+				<th>Task name</th>
+				<th>Description</th>
+				<th>Status</th>
+			</tr>
+		</thead>
+	<tr>
+		<% for task_name in @task_name %>
+		<td><%= task_name.name_of_task %></td>
+			<td><%= task_name.description %></td>
+			<%if(task_name.status)=='0' %>
+									<td>Not Completed</td>
+								<%else%>
+									<td>Completed</td>
+								<%end %>
+			<td width="1%"><%= button_to "Update", {:controller => :task_names,:action => 'edit', :id => task_name.id}, :method => :get , :class=>"btn btn-info"%></td>
+      		<td width="1%"><%= button_to "Delete",{:controller => :task_names,:action => 'destroy', :id => task_name.id, :date=> params[:date]},:class=> "btn btn-danger", :width=>"100%",:method => :delete %></td>
+      		</div>
+			</tr>
+		<% end %>
+</table>
+	<%end%>
+	<br>
+	<button class="btn btn-primary", onclick='window.location="/task_names/new?date=<%=params[:date]%>";'>Add Task
+	</button>
+	<button class="btn btn-primary", onclick='window.location="/dashboard?date=<%=params[:date]%>";'>Back to Dashboard</button>
+</body>

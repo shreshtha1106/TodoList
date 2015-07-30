@@ -1,0 +1,89 @@
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div class="container" style="background-color:lavender;">
+		<div class="row">
+			<div class="col-sm-12" style="background-color:lavenderblush;">
+				<h1> Welcome to your dashboard </h1>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12" style="background-color:grey;">
+			<h2>Tasks for today:</h2>
+			<h3><%=Date.today%>
+					<%=Date.today.strftime('%A')%>
+			</h3>
+			</div>
+		</div>
+		<%if @current_task.blank? ||  @current_task.task_names.blank?%>
+			<br>
+			<h4>No tasks </h4>
+		<%else%>
+			<div class="row">
+			    <div class="col-sm-12" >
+			    	<br>
+			    	<br>
+					<table border=1, width="900">
+						<th>
+			 				<tr bgcolor="#F0F8FF">
+								<td>Task name</td>
+								<td>Description</td>
+								<td>Status</td>
+							</tr>
+						</th>
+						<tr> 
+							<% for task_name in @current_task.task_names %>
+								<td><%= task_name.name_of_task %></td>
+								<td><%= task_name.description %></td>
+								<%if(task_name.status)=='0' %>
+									<td>Not Completed</td>
+								<%else%>
+									<td>Completed</td>
+								<%end %>
+								</tr>
+							<%end%>
+					</table>
+					<% end %>		
+	        <br>
+	<button class="btn btn-primary", onclick='window.location="/task_names/new?date=<%=Date.today%>";'>Add Task</button>
+	</div>
+			</div>	
+<br>
+<br>
+<br>
+<div class="container" style="background-color:lavender;">
+	<div class="row">
+		<div class="col-sm-12" ,style="background-color:lavender;">
+			<h2>Status of the Week</h2>
+			<table border=1, style ="width: 50%">
+			<%id=1%>
+			<% 7.times do%>
+				<% t= Task.find_by(date_of_task: @week_start) %>
+				<%if t.blank? %>
+					<% color = "btn btn-success"%>
+				<%else%>
+				<% color = t.mymethod ?  "btn btn-danger" : "btn btn-success"%>
+				<%end%>
+				<tr>
+    				<td>
+						<button style="width: 100%", id="btn_week_day<%=id%>", class="<%= color%>", date="<%=@week_start%>">
+							<%=@week_start.strftime('%A')%><br>
+							<%=@week_start%></button>
+							<button class="btn btn-primary", onclick='window.location="/task_names/new?date=<%=@week_start%>";'>Add Task</button>
+							
+							<%id=id+1%>
+						<% @week_start=1.day.since(@week_start) %>
+					</td>
+				</tr>
+			<% end %>
+			</table>
+		</div>
+	</div>
+</div>
+</body>
